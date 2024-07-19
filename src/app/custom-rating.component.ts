@@ -6,7 +6,9 @@ import {
   rankWith,
   scopeEndsWith,
   and,
+  Actions,
 } from "@jsonforms/core";
+import { JsonFormsAngularService } from "@jsonforms/angular";
 
 @Component({
   selector: "app-custom-rating",
@@ -16,11 +18,14 @@ import {
 export class CustomRatingComponent extends JsonFormsControl {
   ratings = [1, 2, 3, 4, 5];
 
-  getEventValue = (event: any) => parseInt(event.target.value, 10);
+  constructor(public jsonFormsService: JsonFormsAngularService) {
+    super(jsonFormsService);
+  }
 
   setRating(rating: number) {
-    console.log(rating);
-    // this.handleChange(this.propsPath, rating);
+    this.jsonFormsService.updateCore(
+      Actions.update(this.propsPath, () => rating)
+    );
   }
 
   mapAdditionalProps(props: ControlProps) {
